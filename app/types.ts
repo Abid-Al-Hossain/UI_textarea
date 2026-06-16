@@ -183,6 +183,7 @@ export type TextareaState = {
   successText: string;
   successColor: string;
   charCount: boolean;
+  characterCountPosition: "below" | "above" | "inside" | "floating";
   variantMode: TextareaVariantMode;
 
   // ── Accessibility ──
@@ -333,6 +334,7 @@ export const INITIAL_STATE: TextareaState = {
   successText: "",
   successColor: "#10b981",
   charCount: false,
+  characterCountPosition: "below",
   variantMode: "default",
 
   ariaLabel: "",

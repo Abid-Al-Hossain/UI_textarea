@@ -135,6 +135,14 @@ export default function LabelsSection({
             Show Character Count
           </label>
         </div>
+        {state.charCount && (
+          <Select
+            label="Character Count Position"
+            value={state.characterCountPosition}
+            options={["below", "above", "inside", "floating"]}
+            onChange={(value) => setKey("characterCountPosition")(value as TextareaState["characterCountPosition"])}
+          />
+        )}
         <div className="pt-4 border-t border-slate-700/50 space-y-3">
           <div
             className="text-xs font-semibold uppercase tracking-wider"

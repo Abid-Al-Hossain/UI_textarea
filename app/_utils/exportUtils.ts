@@ -82,6 +82,23 @@ export function buildTextareaExportPayload(params: TextareaExportInput) {
       : "",
   ].filter(Boolean);
 
+  const charCountText = `{value.length}${params.maxLength > 0 ? ` / ${params.maxLength}` : " chars"}`;
+  const charCountBlock = (style: string) =>
+    `      <p style={${style}}>\n        ${charCountText}\n      </p>`;
+  const charCountAbove = params.charCount && params.characterCountPosition === "above"
+    ? charCountBlock('{ marginBottom: 4, fontSize: 11, color: "#94a3b8", textAlign: "right" }')
+    : "";
+  const charCountInsideOrFloating = params.charCount && (params.characterCountPosition === "inside" || params.characterCountPosition === "floating")
+    ? charCountBlock(
+        params.characterCountPosition === "inside"
+          ? '{ position: "absolute", right: 8, bottom: 6, margin: 0, fontSize: 11, color: "#94a3b8", pointerEvents: "none" }'
+          : '{ position: "absolute", right: 0, top: "100%", marginTop: 2, fontSize: 11, color: "#94a3b8" }',
+      )
+    : "";
+  const charCountBelow = params.charCount && params.characterCountPosition === "below"
+    ? charCountBlock('{ marginTop: 4, fontSize: 11, color: "#94a3b8", textAlign: "right" }')
+    : "";
+
   const content = [
     'import React, { useEffect, useState } from "react";',
     "",
@@ -132,6 +149,7 @@ ${labelChildrenLines.join("\n")}
 ${labelChildrenLines.join("\n")}
           </label>`
       : "",
+    charCountAbove,
     `          <textarea
             id={${toJs(params.id || "textarea-preview")}}
             value={value}
@@ -199,6 +217,7 @@ ${labelChildrenLines.join("\n")}
               scrollbarColor: ${toJs(`${params.scrollbarColor} ${params.scrollbarTrackColor}`)},
             }}
           />`,
+    charCountInsideOrFloating,
     "        </div>",
     "      </div>",
     descriptionMessage
@@ -211,11 +230,7 @@ ${labelChildrenLines.join("\n")}
         {${toJs(feedbackMessage.text)}}
       </p>`
       : "",
-    params.charCount
-      ? `      <div style={{ textAlign: "right", fontSize: 12, color: "#94a3b8", marginTop: 4 }}>
-        {value.length}${params.maxLength > 0 ? ` / ${params.maxLength}` : " chars"}
-      </div>`
-      : "",
+    charCountBelow,
     "      <style>{`",
     "        .uif-textarea:hover:not(:disabled) {",
     `          border-color: ${params.hoverBorderColor};`,

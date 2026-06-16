@@ -150,6 +150,21 @@ export default function LivePreview({ state }: { state: TextareaState }) {
     }
   `;
 
+  const charCountNode = state.charCount ? (
+    <p
+      style={
+        state.characterCountPosition === "inside"
+          ? { position: "absolute", right: 8, bottom: 6, margin: 0, fontSize: 11, color: "#94a3b8", pointerEvents: "none" }
+          : state.characterCountPosition === "floating"
+          ? { position: "absolute", right: 0, top: "100%", marginTop: 2, fontSize: 11, color: "#94a3b8" }
+          : { marginTop: 4, marginBottom: state.characterCountPosition === "above" ? 4 : 0, fontSize: 11, color: "#94a3b8", textAlign: "right" }
+      }
+    >
+      {value.length}
+      {state.maxLength > 0 ? ` / ${state.maxLength}` : " chars"}
+    </p>
+  ) : null;
+
   const textareaNode = (
     <div style={{ position: "relative", width: "100%" }}>
       {state.labelPosition === "floating" ? (
@@ -160,6 +175,7 @@ export default function LivePreview({ state }: { state: TextareaState }) {
           ) : null}
         </label>
       ) : null}
+      {state.characterCountPosition === "above" ? charCountNode : null}
       <textarea
         id={pseudoId}
         placeholder={state.placeholder}
@@ -197,6 +213,7 @@ export default function LivePreview({ state }: { state: TextareaState }) {
         role={state.role || undefined}
         style={textareaStyle}
       />
+      {state.characterCountPosition === "inside" || state.characterCountPosition === "floating" ? charCountNode : null}
     </div>
   );
 
@@ -246,19 +263,7 @@ export default function LivePreview({ state }: { state: TextareaState }) {
             {feedbackMessage.text}
           </p>
         )}
-        {state.charCount && (
-          <p
-            style={{
-              marginTop: 4,
-              fontSize: 11,
-              color: "#94a3b8",
-              textAlign: "right",
-            }}
-          >
-            {value.length}
-            {state.maxLength > 0 ? ` / ${state.maxLength}` : " chars"}
-          </p>
-        )}
+        {state.characterCountPosition === "below" ? charCountNode : null}
       </div>
     </div>
   );

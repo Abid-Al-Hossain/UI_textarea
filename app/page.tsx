@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useMemo, useDeferredValue } from "react";
+import ContrastGuard from "@/components/shared/color/ContrastGuard";
 import AppShell from "@/components/shared/layout/AppShell";
 import useHydrated from "@/components/hooks/useHydrated";
 import { useHistoryState } from "@/components/hooks/useHistoryState";
@@ -166,6 +167,7 @@ export default function TextareaPlaygroundPage() {
         controls={controls}
         preview={preview}
       />
-    </AppShell>
+
+<ContrastGuard /></AppShell>
   );
 }
